@@ -9,13 +9,13 @@ import { toArray } from './array'
 
 type EventName = Symbol | number | string
 type EventData = any
-type Listener = (eventData: EventData) => void
-type AnyListener = (eventName: EventName, eventData: EventData) => void
+type Listener = (...eventData: EventData[]) => void
+type AnyListener = (eventName: EventName, ...eventData: EventData[]) => void
 
 interface Debug {
   name?: string
   enabled?: boolean
-  logger?: (type: string, debugName: string | undefined, eventName: EventName | undefined, eventData: EventData) => void
+  logger?: (type: string, debugName: string | undefined, eventName: EventName | undefined, ...eventData: EventData[]) => void
 }
 
 interface Options {
@@ -62,15 +62,15 @@ function getEventProducers(instance: Emitter, eventName?: EventName) {
   return producers.get(key)
 }
 
-function enqueueProducers(instance: Emitter, eventName: EventName, eventData: EventData) {
+function enqueueProducers(instance: Emitter, eventName: EventName, ...eventData: EventData[]) {
   const producers = producersMap.get(instance)
   if (producers.has(eventName)) {
     for (const producer of producers.get(eventName))
-      producer.enqueue(eventData)
+      producer.enqueue(...eventData)
   }
 
   if (producers.has(anyProducer)) {
-    const item = Promise.all([eventName, eventData])
+    const item = Promise.all([eventName, ...eventData])
     for (const producer of producers.get(anyProducer))
       producer.enqueue(item)
   }
@@ -84,7 +84,7 @@ function iterator(instance: Emitter, eventNames?: EventName | EventName[]) {
   let queue: EventData[] | undefined = []
 
   const producer = {
-    enqueue(item: EventData) {
+    enqueue(...item: EventData[]) {
       queue!.push(item)
       flush()
     },
@@ -121,7 +121,7 @@ function iterator(instance: Emitter, eventNames?: EventName | EventName[]) {
       }
     },
 
-    async return(value: EventData) {
+    async return(...value: EventData[]) {
       queue = undefined
 
       for (const eventName of (eventNames as EventName[]))
@@ -142,11 +142,11 @@ function iterator(instance: Emitter, eventNames?: EventName | EventName[]) {
 
 const isMetaEvent = (eventName: EventName) => eventName === listenerAdded || eventName === listenerRemoved
 
-function emitMetaEvent(emitter: Emitter, eventName: EventName, eventData: EventData) {
+function emitMetaEvent(emitter: Emitter, eventName: EventName, ...eventData: EventData[]) {
   if (isMetaEvent(eventName)) {
     try {
       canEmitMetaEvents = true
-      emitter.emit(eventName, eventData)
+      emitter.emit(eventName, ...eventData)
     }
     finally {
       canEmitMetaEvents = false
@@ -220,15 +220,7 @@ class Emitter {
       this.debug.enabled = false
 
     if (!this.debug.logger) {
-      this.debug.logger = (type, debugName, eventName, eventData) => {
-        try {
-          // TODO: Use https://github.com/sindresorhus/safe-stringify when the package is more mature. Just copy-paste the code.
-          eventData = JSON.stringify(eventData)
-        }
-        catch {
-          eventData = `Object with the following keys failed to stringify: ${Object.keys(eventData).join(',')}`
-        }
-
+      this.debug.logger = (type, debugName, eventName, ...eventData) => {
         if (typeof eventName === 'symbol' || typeof eventName === 'number')
           eventName = eventName.toString()
 
@@ -240,9 +232,9 @@ class Emitter {
     }
   }
 
-  logIfDebugEnabled(type: string, eventName: EventName | undefined, eventData: EventData) {
+  logIfDebugEnabled(type: string, eventName: EventName | undefined, ...eventData: EventData[]) {
     if (Emitter.isDebugEnabled || this.debug.enabled)
-      this.debug.logger!(type, this.debug.name, eventName, eventData)
+      this.debug.logger!(type, this.debug.name, eventName, ...eventData)
   }
 
   on(eventNames: EventName | EventName[], listener: Listener) {
@@ -300,15 +292,15 @@ class Emitter {
     return iterator(this, eventNames)
   }
 
-  async emit(eventName: EventName, eventData: EventData) {
+  async emit(eventName: EventName, ...eventData: EventData[]) {
     assertEventName(eventName)
 
     if (isMetaEvent(eventName) && !canEmitMetaEvents)
       throw new TypeError('`eventName` cannot be meta event `listenerAdded` or `listenerRemoved`')
 
-    this.logIfDebugEnabled('emit', eventName, eventData)
+    this.logIfDebugEnabled('emit', eventName, ...eventData)
 
-    enqueueProducers(this, eventName, eventData)
+    enqueueProducers(this, eventName, ...eventData)
 
     const listeners = getListeners(this, eventName)
     const anyListeners = anyMap.get(this)
@@ -319,22 +311,22 @@ class Emitter {
     await Promise.all([
       ...staticListeners.map(async (listener) => {
         if (listeners.has(listener))
-          return listener(eventData)
+          return listener(...eventData)
       }),
       ...staticAnyListeners.map(async (listener) => {
         if (anyListeners.has(listener))
-          return listener(eventName, eventData)
+          return listener(eventName, ...eventData)
       }),
     ])
   }
 
-  async emitSerial(eventName: EventName, eventData: EventData) {
+  async emitSerial(eventName: EventName, ...eventData: EventData[]) {
     assertEventName(eventName)
 
     if (isMetaEvent(eventName) && !canEmitMetaEvents)
       throw new TypeError('`eventName` cannot be meta event `listenerAdded` or `listenerRemoved`')
 
-    this.logIfDebugEnabled('emitSerial', eventName, eventData)
+    this.logIfDebugEnabled('emitSerial', eventName, ...eventData)
 
     const listeners = getListeners(this, eventName)
     const anyListeners = anyMap.get(this)
@@ -345,12 +337,12 @@ class Emitter {
 
     for (const listener of staticListeners) {
       if (listeners.has(listener))
-        await listener(eventData)
+        await listener(...eventData)
     }
 
     for (const listener of staticAnyListeners) {
       if (anyListeners.has(listener))
-        await listener(eventName, eventData)
+        await listener(eventName, ...eventData)
     }
   }
 
