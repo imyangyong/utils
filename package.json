@@ -1,6 +1,6 @@
 {
   "name": "@imyangyong/utils",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "packageManager": "pnpm@7.0.1",
   "description": "Opinionated collection of common JavaScript / TypeScript utils by @imyangyong",
   "keywords": [
