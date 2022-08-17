@@ -20,7 +20,7 @@ const items = [1, 2, 3, 4, 5]
 ## With
 
 ```ts
-import { p } from '@antfu/utils'
+import { p } from '@imyangyong/utils'
 
 const items = [1, 2, 3, 4, 5]
 
@@ -31,7 +31,7 @@ await p(items)
 ```
 
 ```ts
-import { p as P } from '@antfu/utils'
+import { p as P } from '@imyangyong/utils'
 
 const p = P()
 
@@ -49,7 +49,7 @@ await p
 ```
 
 ```ts
-import { p } from '@antfu/utils'
+import { p } from '@imyangyong/utils'
 
 // limits the number of concurrent tasks
 await p(myTasks, { concurrency: 5 })

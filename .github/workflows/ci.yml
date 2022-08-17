@@ -20,7 +20,7 @@ jobs:
           node-version: 16.x
 
       - name: Setup
-        run: npm i -g @antfu/ni
+        run: npm i -g @imyangyong/ni
 
       - name: Install
         run: nci
@@ -38,7 +38,7 @@ jobs:
           node-version: 16.x
 
       - name: Setup
-        run: npm i -g @antfu/ni
+        run: npm i -g @imyangyong/ni
 
       - name: Install
         run: nci

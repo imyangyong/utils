@@ -1,22 +1,21 @@
 {
-  "name": "@antfu/utils",
-  "version": "0.5.2",
+  "name": "@imyangyong/utils",
+  "version": "0.0.1",
   "packageManager": "pnpm@7.0.1",
-  "description": "Opinionated collection of common JavaScript / TypeScript utils by @antfu",
+  "description": "Opinionated collection of common JavaScript / TypeScript utils by @imyangyong",
   "keywords": [
     "utils"
   ],
-  "homepage": "https://github.com/antfu/utils#readme",
+  "homepage": "https://github.com/imyangyong/utils#readme",
   "bugs": {
-    "url": "https://github.com/antfu/utils/issues"
+    "url": "https://github.com/imyangyong/utils/issues"
   },
   "license": "MIT",
-  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+  "author": "Angus Yang <imyangyong@foxmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/antfu/utils.git"
+    "url": "git+https://github.com/imyangyong/utils.git"
   },
-  "funding": "https://github.com/sponsors/antfu",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "index.d.ts",
@@ -43,7 +42,7 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.23.0",
+    "@imyangyong/eslint-config": "^0.4.2",
     "@antfu/ni": "^0.16.2",
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-commonjs": "^22.0.0",
