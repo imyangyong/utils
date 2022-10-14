@@ -1,8 +1,14 @@
+import { expect, it } from 'vitest'
+
+it('exported', () => {
+  expect(1).toEqual(1)
+})
+
 /**
 * @file event-emitter.test
 * @author Angus Yang
 * @date 2022-08-17
-* @description need to refactor by vitest
+* @description TODO: need to refactor by vitest
 */
 // import test from 'ava'
 // import delay from 'delay'
