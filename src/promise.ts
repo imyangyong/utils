@@ -121,3 +121,37 @@ export function createControlledPromise<T>(): ControlledPromise<T> {
   promise.reject = reject
   return promise
 }
+
+export type AsyncTuple<
+ ErrorType = Error,
+ DataType = unknown,
+> =
+ | {
+   error: ErrorType
+   data: null
+ }
+ | { error: null; data: DataType }
+
+/**
+  * Gracefully handles a given Promise factory.
+  *
+  * @description inspired by https://github.com/open-draft/until
+  * @example
+  * const { error, data } = await until(() => asyncAction())
+  */
+export const until = async <
+ ErrorType = Error,
+ DataType = unknown,
+>(
+  promise: () => Promise<DataType>,
+): Promise<AsyncTuple<ErrorType, DataType>> => {
+  try {
+    const data = await promise().catch((error: Error) => {
+      throw error
+    })
+    return { error: null, data }
+  }
+  catch (error: any) {
+    return { error, data: null }
+  }
+}
