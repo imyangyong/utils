@@ -56,3 +56,11 @@ export type DeepMerge<F, S> = MergeInsertions<{
         ? F[K]
         : never;
 }>
+
+export type WithRequiredProperty<Type, Key extends keyof Type> = Type & {
+  [Property in Key]-?: Type[Property];
+}
+
+export type DeepPartial<T> = T extends object ? {
+  [P in keyof T]?: DeepPartial<T[P]>;
+} : T
