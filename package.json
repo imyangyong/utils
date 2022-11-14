@@ -42,8 +42,8 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@imyangyong/eslint-config": "^0.4.2",
     "@antfu/ni": "^0.16.2",
+    "@imyangyong/eslint-config": "^0.4.2",
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-commonjs": "^22.0.0",
     "@rollup/plugin-json": "^4.1.0",
@@ -51,6 +51,7 @@
     "@types/node": "^18.11.4",
     "@types/throttle-debounce": "^5.0.0",
     "bumpp": "^8.2.1",
+    "esbuild": "^0.15.13",
     "eslint": "^8.26.0",
     "esno": "^0.16.3",
     "p-limit": "^4.0.0",
