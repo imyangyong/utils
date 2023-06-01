@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { deepMerge, objectMap } from './object'
+import { deepMerge, deepMergeWithArray, objectMap } from './object'
 
 it('objectMap', () => {
   expect(objectMap({}, (...args) => args)).toEqual({})
@@ -50,5 +50,25 @@ describe('deepMerge', () => {
     const obj1 = { a: ['A', 'B'] }
     const obj2 = { a: ['C'], b: ['D'] }
     expect(deepMerge({}, obj1, obj2)).toEqual({ a: ['C'], b: ['D'] })
+  })
+
+  it('prototype pollution 1', () => {
+    const obj = {} as any
+    const obj2 = {} as any
+    const payload = JSON.parse('{"__proto__":{"polluted":"Polluted!"}}')
+
+    expect(obj.polluted).toBeUndefined()
+    expect(obj2.polluted).toBeUndefined()
+    deepMerge(obj, payload)
+    expect(obj.polluted).toBeUndefined()
+    expect(obj2.polluted).toBeUndefined()
+  })
+})
+
+describe('deepMergeWithArray', () => {
+  it('should merge array values', () => {
+    const obj1 = { a: ['A', 'B'] }
+    const obj2 = { a: ['C'], b: ['D'] }
+    expect(deepMergeWithArray({}, obj1, obj2)).toEqual({ a: ['A', 'B', 'C'], b: ['D'] })
   })
 })
