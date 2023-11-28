@@ -34,6 +34,6 @@ export function notUndefined<T>(v: T): v is Exclude<T, undefined> {
  * @category Guards
  * @example array.filter(isTruthy)
  */
-export function isTruthy<T>(v: T): v is NonNullable<T> {
-  return Boolean(v)
+export function isTruthy<T>(val?: T): val is NonNullable<T> {
+  return Boolean(val) || val === 0
 }
