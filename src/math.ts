@@ -12,6 +12,8 @@ export function sum(...args: number[] | number[][]) {
  * Linearly interpolates between `min` and `max` based on `t`
  *
  * @category Math
+ * @param min
+ * @param max
  * @param t The interpolation value clamped between 0 and 1
  * @example
  * ```

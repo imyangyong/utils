@@ -229,8 +229,8 @@ export function deepDiff<T extends Record<string, { oldValue: any; newValue: any
     }
     else if (val1 !== val2) {
       diff[prop] = {
-        oldValue: val1,
         newValue: val2,
+        oldValue: val1,
       }
     }
   }
@@ -239,8 +239,8 @@ export function deepDiff<T extends Record<string, { oldValue: any; newValue: any
     if (Object.hasOwnProperty.call(obj1, prop)) {
       if (!Object.hasOwnProperty.call(obj2, prop)) {
         diff[prop] = {
-          oldValue: obj1[prop],
           newValue: undefined,
+          oldValue: obj1[prop],
         }
       }
       else {
@@ -252,8 +252,8 @@ export function deepDiff<T extends Record<string, { oldValue: any; newValue: any
   for (const prop in obj2) {
     if (Object.hasOwnProperty.call(obj2, prop) && !Object.hasOwnProperty.call(obj1, prop)) {
       diff[prop] = {
-        oldValue: undefined,
         newValue: obj2[prop],
+        oldValue: undefined,
       }
     }
   }

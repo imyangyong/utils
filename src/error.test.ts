@@ -13,8 +13,8 @@ describe('error', () => {
   it('should be able to create an error', () => {
     try {
       throw new TeamError({
-        name: 'GET_PROJECT_ERROR',
         message: 'Failed to get project',
+        name: 'GET_PROJECT_ERROR',
       })
     }
     catch (error) {

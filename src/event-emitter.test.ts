@@ -5,11 +5,11 @@ it('exported', () => {
 })
 
 /**
-* @file event-emitter.test
-* @author Angus Yang
-* @date 2022-08-17
-* @description TODO: need to refactor by vitest
-*/
+ * @file event-emitter.test
+ * @author Angus Yang
+ * @date 2022-08-17
+ * @description TODO: need to refactor by vitest
+ */
 // import test from 'ava'
 // import delay from 'delay'
 // import pEvent from 'p-event'

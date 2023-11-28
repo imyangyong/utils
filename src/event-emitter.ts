@@ -1,13 +1,13 @@
 /**
-* @file event-emitter
-* @author Angus Yang
-* @date 2022-08-17
-* @description EventEmitter is a minimalist event emitter implementation. forked from https://github.com/sindresorhus/emittery
-*/
+ * @file event-emitter
+ * @author Angus Yang
+ * @date 2022-08-17
+ * @description EventEmitter is a minimalist event emitter implementation. forked from https://github.com/sindresorhus/emittery
+ */
 import type { Fn } from './types'
 import { toArray } from './array'
 
-type EventName = Symbol | number | string
+type EventName = symbol | number | string
 type EventData = any
 type Listener = (...eventData: EventData[]) => void
 type AnyListener = (eventName: EventName, ...eventData: EventData[]) => void
@@ -80,7 +80,7 @@ function iterator(instance: Emitter, eventNames?: EventName | EventName[]) {
   eventNames = toArray(eventNames)
 
   let isFinished = false
-  let flush: (value?: unknown) => void = () => {}
+  let flush: (value?: unknown) => void = () => { }
   let queue: EventData[] | undefined = []
 
   const producer = {
@@ -197,9 +197,11 @@ class Emitter {
   }
 
   static get isDebugEnabled() {
+    // eslint-disable-next-line node/prefer-global/process
     if (typeof process !== 'object')
       return isGlobalDebugEnabled
 
+    // eslint-disable-next-line node/prefer-global/process
     const { env } = process || { env: {} }
     return env.DEBUG === 'emittery' || env.DEBUG === '*' || isGlobalDebugEnabled
   }
@@ -467,16 +469,16 @@ function defaultMethodNamesOrAssert(methodNames: string[]) {
 }
 
 Object.defineProperty(Emitter, 'listenerAdded', {
+  configurable: false,
+  enumerable: true,
   value: listenerAdded,
   writable: false,
-  enumerable: true,
-  configurable: false,
 })
 Object.defineProperty(Emitter, 'listenerRemoved', {
+  configurable: false,
+  enumerable: true,
   value: listenerRemoved,
   writable: false,
-  enumerable: true,
-  configurable: false,
 })
 
 export {

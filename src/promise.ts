@@ -68,6 +68,12 @@ export function createPromiseLock() {
   const locks: Promise<any>[] = []
 
   return {
+    clear() {
+      locks.length = 0
+    },
+    isWaiting() {
+      return Boolean(locks.length)
+    },
     async run<T = void>(fn: () => Promise<T>): Promise<T> {
       const p = fn()
       locks.push(p)
@@ -80,12 +86,6 @@ export function createPromiseLock() {
     },
     async wait(): Promise<void> {
       await Promise.allSettled(locks)
-    },
-    isWaiting() {
-      return Boolean(locks.length)
-    },
-    clear() {
-      locks.length = 0
     },
   }
 }
@@ -134,25 +134,23 @@ export type AsyncTuple<
  | { error: null; data: DataType }
 
 /**
-  * Gracefully handles a given Promise factory.
-  *
-  * @description inspired by https://github.com/open-draft/until
-  * @example
-  * const { error, data } = await until(() => asyncAction())
-  */
-export const until = async <
+ * Gracefully handles a given Promise factory.
+ *
+ * @description inspired by https://github.com/open-draft/until
+ * @example
+ * const { error, data } = await until(() => asyncAction())
+ */
+export async function until<
  ErrorType = Error,
  DataType = unknown,
->(
-  promise: () => Promise<DataType>,
-): Promise<AsyncTuple<ErrorType, DataType>> => {
+>(promise: () => Promise<DataType>): Promise<AsyncTuple<ErrorType, DataType>> {
   try {
     const data = await promise().catch((error: Error) => {
       throw error
     })
-    return { error: null, data }
+    return { data, error: null }
   }
   catch (error: any) {
-    return { error, data: null }
+    return { data: null, error }
   }
 }
