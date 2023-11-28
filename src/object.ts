@@ -212,3 +212,51 @@ export function hasOwnProperty<T>(obj: T, v: PropertyKey) {
     return false
   return Object.prototype.hasOwnProperty.call(obj, v)
 }
+
+/**
+ * deep diff two objects, return the difference
+ *
+ * @category Object
+ */
+export function deepDiff<T extends Record<string, { oldValue: any; newValue: any }>>(obj1: any, obj2: any): T {
+  const diff = {} as any
+
+  function compareProps(prop: string, val1: any, val2: any) {
+    if (typeof val1 === 'object' && typeof val2 === 'object') {
+      const nestedDiff = deepDiff(val1, val2)
+      if (Object.keys(nestedDiff).length > 0)
+        diff[prop] = nestedDiff
+    }
+    else if (val1 !== val2) {
+      diff[prop] = {
+        oldValue: val1,
+        newValue: val2,
+      }
+    }
+  }
+
+  for (const prop in obj1) {
+    if (Object.hasOwnProperty.call(obj1, prop)) {
+      if (!Object.hasOwnProperty.call(obj2, prop)) {
+        diff[prop] = {
+          oldValue: obj1[prop],
+          newValue: undefined,
+        }
+      }
+      else {
+        compareProps(prop, obj1[prop], obj2[prop])
+      }
+    }
+  }
+
+  for (const prop in obj2) {
+    if (Object.hasOwnProperty.call(obj2, prop) && !Object.hasOwnProperty.call(obj1, prop)) {
+      diff[prop] = {
+        oldValue: undefined,
+        newValue: obj2[prop],
+      }
+    }
+  }
+
+  return diff
+}
