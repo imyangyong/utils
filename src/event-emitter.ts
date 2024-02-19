@@ -98,7 +98,7 @@ function iterator(instance: Emitter, eventNames?: EventName | EventName[]) {
     getEventProducers(instance, eventName).add(producer)
 
   return {
-    async next(): Promise<{ value?: EventData; done: boolean }> {
+    async next(): Promise<{ value?: EventData, done: boolean }> {
       if (!queue)
         return { done: true }
 
@@ -166,7 +166,7 @@ class Emitter {
           throw new Error(`The property \`${methodName}\` already exists on \`target\``)
       }
 
-      function getEmitteryProperty(this: { enumerable: false; get: () => any }) {
+      function getEmitteryProperty(this: { enumerable: false, get: () => any }) {
         Object.defineProperty(this, emitteryPropertyName, {
           enumerable: false,
           value: new Emitter(),

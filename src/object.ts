@@ -218,7 +218,7 @@ export function hasOwnProperty<T>(obj: T, v: PropertyKey) {
  *
  * @category Object
  */
-export function deepDiff<T extends Record<string, { oldValue: any; newValue: any }>>(obj1: any, obj2: any): T {
+export function deepDiff<T extends Record<string, { oldValue: any, newValue: any }>>(obj1: any, obj2: any): T {
   const diff = {} as any
 
   function compareProps(prop: string, val1: any, val2: any) {

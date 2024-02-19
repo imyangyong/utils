@@ -13,4 +13,4 @@ Opinionated collection of common JavaScript / TypeScript utils by [@imyangyong](
 
 ## License
 
-[MIT](./LICENSE) License © 2021 [Angus Yang](https://github.com/imyangyong)
+[MIT](./LICENSE) License © 2023-PRESENT [Angus Yang](https://github.com/imyangyong)

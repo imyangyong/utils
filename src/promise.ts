@@ -94,8 +94,8 @@ export function createPromiseLock() {
  * Promise with `resolve` and `reject` methods of itself
  */
 export interface ControlledPromise<T = void> extends Promise<T> {
-  resolve(value: T | PromiseLike<T>): void
-  reject(reason?: any): void
+  resolve: (value: T | PromiseLike<T>) => void
+  reject: (reason?: any) => void
 }
 
 /**
@@ -127,11 +127,11 @@ export type AsyncTuple<
  ErrorType = Error,
  DataType = unknown,
 > =
- | {
-   error: ErrorType
-   data: null
- }
- | { error: null; data: DataType }
+  | {
+    error: ErrorType
+    data: null
+  }
+  | { error: null, data: DataType }
 
 /**
  * Gracefully handles a given Promise factory.
