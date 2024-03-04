@@ -30,3 +30,27 @@ export function tap<T>(value: T, callback: (value: T) => void): T {
   callback(value)
   return value
 }
+
+/**
+ * try to invoke the function otherwise return null
+ */
+export function tryOrReturnNull<T>(fn: () => T): T | null {
+  try {
+    return fn()
+  }
+  catch {
+    return null
+  }
+}
+
+/**
+ * try to invoke the function async otherwise return null
+ */
+export async function tryOrReturnNullAsync<T>(fn: () => T): Promise<T | null> {
+  try {
+    return await fn()
+  }
+  catch {
+    return null
+  }
+}
