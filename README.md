@@ -1,7 +1,7 @@
 # @imyangyong/utils
 
 [![NPM version](https://img.shields.io/npm/v/@imyangyong/utils?color=a1b858&label=)](https://www.npmjs.com/package/@imyangyong/utils)
-[![Docs](https://www.paka.dev/badges/v0/cute.svg)](https://www.paka.dev/npm/@imyangyong/utils)
+[![Docs](https://img.shields.io/badge/docs-green)](https://www.jsdocs.io/package/@antfu/utils)
 
 Opinionated collection of common JavaScript / TypeScript utils by [@imyangyong](https://github.com/imyangyong).
 
