@@ -201,3 +201,18 @@ export function shuffle<T>(array: T[]): T[] {
   }
   return array
 }
+
+/**
+ * Convert an array to a dictionary by mapping each item
+ * into a dictionary key & value
+ *
+ * @description inspired by https://github.com/rayepps/radash/blob/069b26cdd7d62e6ac16a0ad3baa1c9abcca420bc/src/array.ts#L199
+ *
+ * @category Array
+ */
+export function objectify<T, Key extends string | number | symbol, Value = T>(array: readonly T[], getKey: (item: T) => Key, getValue: (item: T) => Value = item => item as unknown as Value): Record<Key, Value> {
+  return array.reduce((acc, item) => {
+    acc[getKey(item)] = getValue(item)
+    return acc
+  }, {} as Record<Key, Value>)
+}

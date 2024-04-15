@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { flattenArrayable, partition, range, toArray } from './array'
+import { flattenArrayable, objectify, partition, range, toArray } from './array'
 
 describe('toArray', () => {
   it.each([
@@ -71,4 +71,46 @@ it('partition', () => {
       i => i,
     ),
   ).toHaveLength(6)
+})
+
+it('objectify', () => {
+  const data = [
+    {
+      name: 'Marlin',
+      weight: 105,
+    },
+    {
+      name: 'Bass',
+      weight: 8,
+    },
+    {
+      name: 'Trout',
+      weight: 13,
+    },
+  ]
+
+  expect(
+    objectify(data, i => i.name),
+  ).toEqual({
+    Marlin: {
+      name: 'Marlin',
+      weight: 105,
+    },
+    Bass: {
+      name: 'Bass',
+      weight: 8,
+    },
+    Trout: {
+      name: 'Trout',
+      weight: 13,
+    },
+  })
+
+  expect(
+    objectify(data, i => i.name, i => i.weight),
+  ).toEqual({
+    Marlin: 105,
+    Bass: 8,
+    Trout: 13,
+  })
 })
