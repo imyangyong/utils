@@ -260,3 +260,23 @@ export function deepDiff<T extends Record<string, { oldValue: any, newValue: any
 
   return diff
 }
+
+/**
+ * Convert an object to a list, mapping each entry
+ * into a list item
+ *
+ * @description inspired by: https://github.com/rayepps/radash/blob/069b26cdd7d62e6ac16a0ad3baa1c9abcca420bc/src/object.ts#L152
+ *
+ * @category Object
+ */
+export function listify<TValue, TKey extends string | number | symbol, KResult>(obj: Record<TKey, TValue>, toItem: (key: TKey, value: TValue) => KResult) {
+  if (!obj)
+    return []
+  const entries = Object.entries(obj)
+  if (entries.length === 0)
+    return []
+  return entries.reduce((acc, entry) => {
+    acc.push(toItem(entry[0] as TKey, entry[1] as TValue))
+    return acc
+  }, [] as KResult[])
+}

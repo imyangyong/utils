@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { deepMerge, deepMergeWithArray, objectMap } from './object'
+import { deepMerge, deepMergeWithArray, listify, objectMap } from './object'
 
 it('objectMap', () => {
   expect(objectMap({}, (...args) => args)).toEqual({})
@@ -76,4 +76,17 @@ describe('deepMergeWithArray', () => {
     const obj2 = { a: ['C'], b: ['D'] }
     expect(deepMergeWithArray({}, obj1, obj2)).toEqual({ a: ['A', 'B', 'C'], b: ['D'] })
   })
+})
+
+it('listify', () => {
+  const data = {
+    marlin: {
+      weight: 105,
+    },
+    bass: {
+      weight: 8,
+    },
+  }
+
+  expect(listify(data, (key, value) => ({ ...value, name: key }))).toEqual([{ name: 'marlin', weight: 105 }, { name: 'bass', weight: 8 }])
 })
