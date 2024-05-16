@@ -1,3 +1,5 @@
+import type { Awaitable } from './types'
+
 /**
  * Type guard to filter out null-ish values
  *
@@ -29,11 +31,9 @@ export function notUndefined<T>(v: T): v is Exclude<T, undefined> {
 }
 
 /**
- * Type guard to filter out falsy values
- *
- * @category Guards
- * @example array.filter(isTruthy)
+ * Interop helper to get the default export from a commonjs module or es module
  */
-export function isTruthy<T>(val?: T): val is NonNullable<T> {
-  return Boolean(val) || val === 0
+export async function interopDefault<T>(m: Awaitable<T>): Promise<T extends { default: infer U } ? U : T> {
+  const resolved = await m
+  return (resolved as any).default || resolved
 }

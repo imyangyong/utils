@@ -8,6 +8,7 @@ export const isString = (val: unknown): val is string => typeof val === 'string'
 export const isObject = (val: any): val is object => toString(val) === '[object Object]'
 export const isUndefined = (val: any): val is undefined => toString(val) === '[object Undefined]'
 export const isNull = (val: any): val is null => toString(val) === '[object Null]'
+export const isTruthy = <T>(val?: T): val is NonNullable<T> => Boolean(val) || val === 0
 export const isRegExp = (val: any): val is RegExp => toString(val) === '[object RegExp]'
 export const isDate = (val: any): val is Date => toString(val) === '[object Date]'
 
