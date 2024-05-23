@@ -288,18 +288,18 @@ export function listify<TValue, TKey extends string | number | symbol, KResult>(
  * const keysMap = { 'a': 'A', b: 'B', c: 'C', 'c:d': 'D','e:f:g': 'G' }
  * renameObjectKeysDeeply(keysMap, obj) // { A: 1, B: 2, C: { D: 3 }, e: { f: { G: 4 } }
  */
-export function renameObjectKeys<T extends Record<string, any>>(keysMap: Record<string, string>, obj: T): T {
+export function renameObjectKeys<T extends Record<string, any>, U = Record<string, string>>(keysMap: U, obj: Record<string, any>): T {
   const isObject = (obj: any): obj is Record<string, any> => typeof obj === "object" && obj !== null && !Array.isArray(obj);
   const renameObject = (prevKey: string, currObj: any): any => {
-      if(isObject(currObj)) {
-          let renamedObj: Record<string, any> = {};
-          for(let key in currObj) {
-              let newKey = keysMap[prevKey + key] || key;
-              renamedObj[newKey] = renameObject(prevKey + key + ':', currObj[key]);
-          }
-          return renamedObj;
+    if(isObject(currObj)) {
+      let renamedObj: Record<string, any> = {};
+      for(let key in currObj) {
+        let newKey = (keysMap as Record<string, string>)[prevKey + key] || key;
+        renamedObj[newKey] = renameObject(prevKey + key + ':', currObj[key]);
       }
-      return currObj;
+      return renamedObj;
+    }
+    return currObj;
   }
   return renameObject('', obj);
 }
@@ -307,21 +307,20 @@ export function renameObjectKeys<T extends Record<string, any>>(keysMap: Record<
 /**
  * Immutably rename object keys in an array of objects
  */
-export function renameObjectKeysInArray<T extends Record<string, any>>(keysMap: Record<string, string>, arr: T[]): T[] {
+export function renameObjectKeysInArray<T extends Record<string, any>>(keysMap: Record<string, string>, arr: Record<string, any>[]): T[] {
   return arr.map(obj => renameObjectKeys(keysMap, obj));
 }
 
 /**
  * Immutably rename object keys in an array of objects deeply
  */
-export function renameObjectKeysInArrayDeeply<T extends Record<string, any>>(keysMap: Record<string, string>, childrenKey: string, arr: T[]): T[] {
+export function renameObjectKeysInArrayDeeply<T extends Record<string, any>>(keysMap: Record<string, string>, childrenKey: string, arr: Record<string, any>[]): T[] {
   return arr.map(obj => {
     const renamedObj = renameObjectKeys(keysMap, obj);
     const renamedChildrenKey = keysMap[childrenKey] || childrenKey;
     if (renamedObj[renamedChildrenKey]) {
-      // @ts-expect-error - recursive call
       renamedObj[renamedChildrenKey] = renameObjectKeysInArrayDeeply(keysMap, childrenKey, renamedObj[renamedChildrenKey]);
     }
     return renamedObj;
-  });
+  }) as T[];
 }
