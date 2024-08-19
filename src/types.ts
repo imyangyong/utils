@@ -64,3 +64,21 @@ export type WithRequiredProperty<Type, Key extends keyof Type> = Type & {
 export type DeepPartial<T> = T extends object ? {
   [P in keyof T]?: DeepPartial<T[P]>;
 } : T
+
+
+// Define a type for JSON values
+type JSONValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JSONArray
+  | JSONObject;
+
+// Define a type for JSON arrays
+interface JSONArray extends Array<JSONValue> {}
+
+// Define a type for JSON objects
+export interface JSONObject {
+  [key: string]: JSONValue;
+}
