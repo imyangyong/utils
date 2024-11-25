@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@antfu/ni": "^0.21.12",
-    "@imyangyong/eslint-config": "^1.7.0",
+    "@imyangyong/eslint-config": "^2.0.1",
     "@rollup/plugin-alias": "^5.1.0",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
@@ -52,7 +52,6 @@
     "@types/throttle-debounce": "^5.0.2",
     "bumpp": "^9.4.1",
     "esno": "^4.7.0",
-    "p-limit": "^5.0.0",
     "rollup": "^4.17.2",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-esbuild": "^6.1.1",
@@ -60,5 +59,9 @@
     "typescript": "^5.4.5",
     "vite": "^5.2.11",
     "vitest": "^1.6.0"
+  },
+  "dependencies": {
+    "p-limit": "^6.1.0",
+    "p-map": "^7.0.2"
   }
 }

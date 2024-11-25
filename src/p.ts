@@ -1,4 +1,5 @@
 import pLimit from 'p-limit'
+export * from 'p-map'
 
 /**
  * Internal marker for filtered items
