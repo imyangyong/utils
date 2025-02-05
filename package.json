@@ -52,7 +52,7 @@
     "@types/throttle-debounce": "^5.0.2",
     "bumpp": "^9.4.1",
     "esno": "^4.7.0",
-    "rollup": "^4.17.2",
+    "rollup": "^4.34.2",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-esbuild": "^6.1.1",
     "throttle-debounce": "5.0.0",

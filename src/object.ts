@@ -90,22 +90,23 @@ export function deepMerge<T extends object = object, S extends object = T>(targe
 
       // @ts-expect-error
       if (isMergableObject(source[key])) {
-        // @ts-expect-error
+        // @ts-expect-error ''
         if (!target[key])
-          // @ts-expect-error
+          // @ts-expect-error ''
           target[key] = {}
 
-        // @ts-expect-error
+        // @ts-expect-error ''
         if (isMergableObject(target[key])) {
+          // @ts-expect-error ''
           deepMerge(target[key], source[key])
         }
         else {
-          // @ts-expect-error
+          // @ts-expect-error ''
           target[key] = source[key]
         }
       }
       else {
-        // @ts-expect-error
+        // @ts-expect-error ''
         target[key] = source[key]
       }
     })
