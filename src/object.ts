@@ -97,7 +97,6 @@ export function deepMerge<T extends object = object, S extends object = T>(targe
 
         // @ts-expect-error
         if (isMergableObject(target[key])) {
-          // @ts-expect-error
           deepMerge(target[key], source[key])
         }
         else {
@@ -323,4 +322,112 @@ export function renameObjectKeysInArrayDeeply<T extends Record<string, any>>(key
     }
     return renamedObj;
   }) as T[];
+}
+
+/**
+ * LRU Cache
+ */
+// Node class for doubly-linked list
+class Node {
+  key: any;
+  value: any;
+  prev: Node | null;
+  next: Node | null;
+
+  constructor(key: any, value: any) {
+    this.key = key;
+    this.value = value;
+    this.prev = null;
+    this.next = null;
+  }
+}
+
+export class LRUCache {
+  private cache: Map<any, Node>;
+  private maxSize: number;
+  private head: Node;
+  private tail: Node;
+
+  constructor(maxSize: number) {
+    this.cache = new Map();
+    this.maxSize = maxSize;
+
+    // Initialize dummy head and tail nodes
+    this.head = new Node(0, 0);
+    this.tail = new Node(0, 0);
+    this.head.next = this.tail;
+    this.tail.prev = this.head;
+  }
+
+  private addNode(node: Node) {
+    // Always add the new node right after head
+    node.prev = this.head;
+    node.next = this.head.next;
+
+    this.head.next!.prev = node;
+    this.head.next = node;
+  }
+
+  private removeNode(node: Node) {
+    // Remove an existing node from the linked list
+    const prev = node.prev;
+    const next = node.next;
+
+    prev!.next = next;
+    next!.prev = prev;
+  }
+
+  private moveToHead(node: Node) {
+    this.removeNode(node);
+    this.addNode(node);
+  }
+
+  private removeTail(): Node {
+    const node = this.tail.prev!;
+    this.removeNode(node);
+    return node;
+  }
+
+  get(key: any): any {
+    const node = this.cache.get(key);
+    if (!node) {
+      return undefined;
+    }
+
+    // Move to head (recently used)
+    this.moveToHead(node);
+    return node.value;
+  }
+
+  set(key: any, value: any): void {
+    const node = this.cache.get(key);
+
+    if (node) {
+      // Update the value and move to head
+      node.value = value;
+      this.moveToHead(node);
+    } else {
+      const newNode = new Node(key, value);
+
+      // Add to cache and linked list
+      this.cache.set(key, newNode);
+      this.addNode(newNode);
+
+      // Remove the least recently used item if cache is full
+      if (this.cache.size > this.maxSize) {
+        const tailNode = this.removeTail();
+        this.cache.delete(tailNode.key);
+      }
+    }
+  }
+
+  has(key: any): boolean {
+    return this.cache.has(key);
+  }
+
+  clear(): void {
+    this.cache.clear();
+    this.head.next = this.tail;
+    this.tail.prev = this.head;
+  }
 }
