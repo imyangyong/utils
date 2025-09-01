@@ -1,5 +1,5 @@
-import { remove } from './array'
 import type { Fn } from './types'
+import { remove } from './array'
 
 export interface SingletonPromiseReturn<T> {
   (): Promise<T>
@@ -124,10 +124,10 @@ export function createControlledPromise<T>(): ControlledPromise<T> {
 }
 
 export type AsyncTuple<
- ErrorType = Error,
- DataType = unknown,
-> =
-  | {
+  ErrorType = Error,
+  DataType = unknown,
+>
+  = | {
     error: ErrorType
     data: null
   }
@@ -141,8 +141,8 @@ export type AsyncTuple<
  * const { error, data } = await until(() => asyncAction())
  */
 export async function until<
- ErrorType = Error,
- DataType = unknown,
+  ErrorType = Error,
+  DataType = unknown,
 >(promise: () => Promise<DataType>): Promise<AsyncTuple<ErrorType, DataType>> {
   try {
     const data = await promise().catch((error: Error) => {

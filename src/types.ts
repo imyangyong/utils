@@ -42,8 +42,8 @@ export type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never
  */
 export type ArgumentsType<T> = T extends ((...args: infer A) => any) ? A : never
 
-export type MergeInsertions<T> =
-  T extends object
+export type MergeInsertions<T>
+  = T extends object
     ? { [K in keyof T]: MergeInsertions<T[K]> }
     : T
 
@@ -65,20 +65,19 @@ export type DeepPartial<T> = T extends object ? {
   [P in keyof T]?: DeepPartial<T[P]>;
 } : T
 
-
 // Define a type for JSON values
-type JSONValue =
-  | string
-  | number
-  | boolean
-  | null
-  | JSONArray
-  | JSONObject;
+type JSONValue
+  = | string
+    | number
+    | boolean
+    | null
+    | JSONArray
+    | JSONObject
 
 // Define a type for JSON arrays
 interface JSONArray extends Array<JSONValue> {}
 
 // Define a type for JSON objects
 export interface JSONObject {
-  [key: string]: JSONValue;
+  [key: string]: JSONValue
 }

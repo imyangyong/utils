@@ -1,6 +1,6 @@
+import type { AsyncTuple } from './promise'
 import { describe, expect, it } from 'vitest'
 import { createSingletonPromise, sleep, until } from './promise'
-import type { AsyncTuple } from './promise'
 
 it('promise', async () => {
   let dummy = 0

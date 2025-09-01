@@ -1,8 +1,8 @@
 {
   "name": "@imyangyong/utils",
   "type": "module",
-  "packageManager": "pnpm@9.1.0",
   "version": "0.11.0",
+  "packageManager": "pnpm@9.1.0",
   "description": "Opinionated collection of common JavaScript / TypeScript utils by @antfu",
   "author": "Angus Yang <imyangyong@foxmail.com>",
   "license": "MIT",
@@ -41,9 +41,13 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest"
   },
+  "dependencies": {
+    "p-limit": "^6.1.0",
+    "p-map": "^7.0.2"
+  },
   "devDependencies": {
+    "@antfu/eslint-config": "^5.2.1",
     "@antfu/ni": "^0.21.12",
-    "@imyangyong/eslint-config": "^2.0.1",
     "@rollup/plugin-alias": "^5.1.0",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
@@ -51,6 +55,7 @@
     "@types/node": "^20.12.10",
     "@types/throttle-debounce": "^5.0.2",
     "bumpp": "^9.4.1",
+    "eslint": "^9.34.0",
     "esno": "^4.7.0",
     "rollup": "^4.34.2",
     "rollup-plugin-dts": "^6.1.0",
@@ -59,9 +64,5 @@
     "typescript": "^5.4.5",
     "vite": "^5.2.11",
     "vitest": "^1.6.0"
-  },
-  "dependencies": {
-    "p-limit": "^6.1.0",
-    "p-map": "^7.0.2"
   }
 }

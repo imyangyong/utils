@@ -102,19 +102,19 @@ it('listify', () => {
 describe('renameObjectKeys', () => {
   it('should rename keys', () => {
     const obj = { a: 1, b: 2, c: { d: 3 }, e: { f: { g: 4 }, h: [] } }
-    const keysMap = { 'a': 'A', b: 'B', c: 'C', 'c:d': 'D','e:f:g': 'G' }
-    expect(renameObjectKeys(keysMap, obj)).toEqual({ A: 1, B: 2, C: { D: 3 }, e: { f: { G: 4 }, h: []}})
+    const keysMap = { 'a': 'A', 'b': 'B', 'c': 'C', 'c:d': 'D', 'e:f:g': 'G' }
+    expect(renameObjectKeys(keysMap, obj)).toEqual({ A: 1, B: 2, C: { D: 3 }, e: { f: { G: 4 }, h: [] } })
   })
 
   it('should rename object keys in array', () => {
-    const arr = [{ a: 1, b: 2, c: { d: 5 } }, { a: 3, b: 4, c: { d: 6 }}]
-    const keysMap = { a: 'A', b: 'B', 'c:d': 'D' }
+    const arr = [{ a: 1, b: 2, c: { d: 5 } }, { a: 3, b: 4, c: { d: 6 } }]
+    const keysMap = { 'a': 'A', 'b': 'B', 'c:d': 'D' }
     expect(renameObjectKeysInArray(keysMap, arr)).toEqual([{ A: 1, B: 2, c: { D: 5 } }, { A: 3, B: 4, c: { D: 6 } }])
   })
 
   it('should rename object keys in array deeply', () => {
     const arr = [{ a: 1, b: [{ a: 2 }] }, { a: 3, b: [{ a: 4 }] }]
     const keysMap = { a: 'A', b: 'B' }
-    expect(renameObjectKeysInArrayDeeply(keysMap, 'b', arr)).toEqual([{"A": 1,"B": [{"A": 2,},], },{"A": 3,"B": [{"A": 4,},],},])
+    expect(renameObjectKeysInArrayDeeply(keysMap, 'b', arr)).toEqual([{ A: 1, B: [{ A: 2 }] }, { A: 3, B: [{ A: 4 }] }])
   })
 })

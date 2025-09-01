@@ -1,6 +1,6 @@
+import type { DeepMerge } from './types'
 import { notNullish } from './guards'
 import { isObject } from './is'
-import type { DeepMerge } from './types'
 
 /**
  * Map key/value pairs for an object, and construct a new one
@@ -88,25 +88,24 @@ export function deepMerge<T extends object = object, S extends object = T>(targe
       if (key === '__proto__' || key === 'constructor' || key === 'prototype')
         return
 
-      // @ts-expect-error
+      // @ts-expect-error index of type
       if (isMergableObject(source[key])) {
-        // @ts-expect-error ''
+        // @ts-expect-error index of type
         if (!target[key])
-          // @ts-expect-error ''
+          // @ts-expect-error index of type
           target[key] = {}
 
-        // @ts-expect-error ''
+        // @ts-expect-error index of type
         if (isMergableObject(target[key])) {
-          // @ts-expect-error ''
           deepMerge(target[key], source[key])
         }
         else {
-          // @ts-expect-error ''
+          // @ts-expect-error index of type
           target[key] = source[key]
         }
       }
       else {
-        // @ts-expect-error ''
+        // @ts-expect-error index of type
         target[key] = source[key]
       }
     })
@@ -141,28 +140,28 @@ export function deepMergeWithArray<T extends object = object, S extends object =
       if (key === '__proto__' || key === 'constructor' || key === 'prototype')
         return
 
-      // @ts-expect-error
+      // @ts-expect-error index of type
       if (Array.isArray(source[key])) {
-        // @ts-expect-error
+        // @ts-expect-error index of type
         if (!target[key])
-          // @ts-expect-error
+          // @ts-expect-error index of type
           target[key] = []
 
-        // @ts-expect-error
+        // @ts-expect-error index of type
         deepMergeWithArray(target[key], source[key])
       }
-      // @ts-expect-error
+      // @ts-expect-error index of type
       else if (isMergableObject(source[key])) {
-        // @ts-expect-error
+        // @ts-expect-error index of type
         if (!target[key])
-          // @ts-expect-error
+          // @ts-expect-error index of type
           target[key] = {}
 
-        // @ts-expect-error
+        // @ts-expect-error index of type
         deepMergeWithArray(target[key], source[key])
       }
       else {
-        // @ts-expect-error
+        // @ts-expect-error index of type
         target[key] = source[key]
       }
     })
@@ -196,7 +195,7 @@ export function objectPick<O extends object, T extends keyof O>(obj: O, keys: T[
  * @category Object
  */
 export function clearUndefined<T extends object>(obj: T): T {
-  // @ts-expect-error
+  // @ts-expect-error index of type
   Object.keys(obj).forEach((key: string) => (obj[key] === undefined ? delete obj[key] : {}))
   return obj
 }
@@ -289,40 +288,40 @@ export function listify<TValue, TKey extends string | number | symbol, KResult>(
  * renameObjectKeysDeeply(keysMap, obj) // { A: 1, B: 2, C: { D: 3 }, e: { f: { G: 4 } }
  */
 export function renameObjectKeys<T extends Record<string, any>, U = Record<string, string>>(keysMap: U, obj: Record<string, any>): T {
-  const isObject = (obj: any): obj is Record<string, any> => typeof obj === "object" && obj !== null && !Array.isArray(obj);
+  const isObject = (obj: any): obj is Record<string, any> => typeof obj === 'object' && obj !== null && !Array.isArray(obj)
   const renameObject = (prevKey: string, currObj: any): any => {
-    if(isObject(currObj)) {
-      let renamedObj: Record<string, any> = {};
-      for(let key in currObj) {
-        let newKey = (keysMap as Record<string, string>)[prevKey + key] || key;
-        renamedObj[newKey] = renameObject(prevKey + key + ':', currObj[key]);
+    if (isObject(currObj)) {
+      const renamedObj: Record<string, any> = {}
+      for (const key in currObj) {
+        const newKey = (keysMap as Record<string, string>)[prevKey + key] || key
+        renamedObj[newKey] = renameObject(`${prevKey + key}:`, currObj[key])
       }
-      return renamedObj;
+      return renamedObj
     }
-    return currObj;
+    return currObj
   }
-  return renameObject('', obj);
+  return renameObject('', obj)
 }
 
 /**
  * Immutably rename object keys in an array of objects
  */
 export function renameObjectKeysInArray<T extends Record<string, any>>(keysMap: Record<string, string>, arr: Record<string, any>[]): T[] {
-  return arr.map(obj => renameObjectKeys(keysMap, obj));
+  return arr.map(obj => renameObjectKeys(keysMap, obj))
 }
 
 /**
  * Immutably rename object keys in an array of objects deeply
  */
 export function renameObjectKeysInArrayDeeply<T extends Record<string, any>>(keysMap: Record<string, string>, childrenKey: string, arr: Record<string, any>[]): T[] {
-  return arr.map(obj => {
-    const renamedObj = renameObjectKeys(keysMap, obj);
-    const renamedChildrenKey = keysMap[childrenKey] || childrenKey;
+  return arr.map((obj) => {
+    const renamedObj = renameObjectKeys(keysMap, obj)
+    const renamedChildrenKey = keysMap[childrenKey] || childrenKey
     if (renamedObj[renamedChildrenKey]) {
-      renamedObj[renamedChildrenKey] = renameObjectKeysInArrayDeeply(keysMap, childrenKey, renamedObj[renamedChildrenKey]);
+      renamedObj[renamedChildrenKey] = renameObjectKeysInArrayDeeply(keysMap, childrenKey, renamedObj[renamedChildrenKey])
     }
-    return renamedObj;
-  }) as T[];
+    return renamedObj
+  }) as T[]
 }
 
 /**
@@ -330,105 +329,106 @@ export function renameObjectKeysInArrayDeeply<T extends Record<string, any>>(key
  */
 // Node class for doubly-linked list
 class Node {
-  key: any;
-  value: any;
-  prev: Node | null;
-  next: Node | null;
+  key: any
+  value: any
+  prev: Node | null
+  next: Node | null
 
   constructor(key: any, value: any) {
-    this.key = key;
-    this.value = value;
-    this.prev = null;
-    this.next = null;
+    this.key = key
+    this.value = value
+    this.prev = null
+    this.next = null
   }
 }
 
 export class LRUCache {
-  private cache: Map<any, Node>;
-  private maxSize: number;
-  private head: Node;
-  private tail: Node;
+  private cache: Map<any, Node>
+  private maxSize: number
+  private head: Node
+  private tail: Node
 
   constructor(maxSize: number) {
-    this.cache = new Map();
-    this.maxSize = maxSize;
+    this.cache = new Map()
+    this.maxSize = maxSize
 
     // Initialize dummy head and tail nodes
-    this.head = new Node(0, 0);
-    this.tail = new Node(0, 0);
-    this.head.next = this.tail;
-    this.tail.prev = this.head;
+    this.head = new Node(0, 0)
+    this.tail = new Node(0, 0)
+    this.head.next = this.tail
+    this.tail.prev = this.head
   }
 
   private addNode(node: Node) {
     // Always add the new node right after head
-    node.prev = this.head;
-    node.next = this.head.next;
+    node.prev = this.head
+    node.next = this.head.next
 
-    this.head.next!.prev = node;
-    this.head.next = node;
+    this.head.next!.prev = node
+    this.head.next = node
   }
 
   private removeNode(node: Node) {
     // Remove an existing node from the linked list
-    const prev = node.prev;
-    const next = node.next;
+    const prev = node.prev
+    const next = node.next
 
-    prev!.next = next;
-    next!.prev = prev;
+    prev!.next = next
+    next!.prev = prev
   }
 
   private moveToHead(node: Node) {
-    this.removeNode(node);
-    this.addNode(node);
+    this.removeNode(node)
+    this.addNode(node)
   }
 
   private removeTail(): Node {
-    const node = this.tail.prev!;
-    this.removeNode(node);
-    return node;
+    const node = this.tail.prev!
+    this.removeNode(node)
+    return node
   }
 
   get(key: any): any {
-    const node = this.cache.get(key);
+    const node = this.cache.get(key)
     if (!node) {
-      return undefined;
+      return undefined
     }
 
     // Move to head (recently used)
-    this.moveToHead(node);
-    return node.value;
+    this.moveToHead(node)
+    return node.value
   }
 
   set(key: any, value: any): void {
-    const node = this.cache.get(key);
+    const node = this.cache.get(key)
 
     if (node) {
       // Update the value and move to head
-      node.value = value;
-      this.moveToHead(node);
-    } else {
-      const newNode = new Node(key, value);
+      node.value = value
+      this.moveToHead(node)
+    }
+    else {
+      const newNode = new Node(key, value)
 
       // Add to cache and linked list
-      this.cache.set(key, newNode);
-      this.addNode(newNode);
+      this.cache.set(key, newNode)
+      this.addNode(newNode)
 
       // Remove the least recently used item if cache is full
       if (this.cache.size > this.maxSize) {
-        const tailNode = this.removeTail();
-        this.cache.delete(tailNode.key);
+        const tailNode = this.removeTail()
+        this.cache.delete(tailNode.key)
       }
     }
   }
 
   has(key: any): boolean {
-    return this.cache.has(key);
+    return this.cache.has(key)
   }
 
   clear(): void {
-    this.cache.clear();
-    this.head.next = this.tail;
-    this.tail.prev = this.head;
+    this.cache.clear()
+    this.head.next = this.tail
+    this.tail.prev = this.head
   }
 }

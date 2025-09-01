@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { ErrorBase } from './error'
 
-type ErrorName =
-  | 'GET_PROJECT_ERROR'
-  | 'CREATE_PROJECT_ERROR'
-  | 'UPDATE_PROJECT_ERROR'
-  | 'DELETE_PROJECT_ERROR'
+type ErrorName
+  = | 'GET_PROJECT_ERROR'
+    | 'CREATE_PROJECT_ERROR'
+    | 'UPDATE_PROJECT_ERROR'
+    | 'DELETE_PROJECT_ERROR'
 
 class TeamError extends ErrorBase<ErrorName> {}
 
