@@ -13,6 +13,14 @@ export const isTruthy = <T>(val?: T): val is NonNullable<T> => Boolean(val) || v
 export const isRegExp = (val: any): val is RegExp => toString(val) === '[object RegExp]'
 export const isDate = (val: any): val is Date => toString(val) === '[object Date]'
 
+/**
+ * Check if a value is primitive
+ */
+export function isPrimitive(val: any): val is string | number | boolean | symbol | bigint | null | undefined {
+  return !val || Object(val) !== val
+}
+
+// @ts-expect-error xxx
 export const isWindow = (val: any): boolean => typeof window !== 'undefined' && toString(val) === '[object Window]'
 
 /**

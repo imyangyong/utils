@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { flattenArrayable, objectify, partition, range, toArray } from './array'
+import { filterInPlace, flattenArrayable, objectify, partition, range, toArray } from './array'
 
 describe('toArray', () => {
   it.each([
@@ -113,4 +113,11 @@ it('objectify', () => {
     Bass: 8,
     Trout: 13,
   })
+})
+
+it('filterInPlace', () => {
+  const data = range(10)
+  const result = filterInPlace(data, i => i % 2)
+  expect(data).toEqual([1, 3, 5, 7, 9])
+  expect(data).toBe(result)
 })

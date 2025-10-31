@@ -3,6 +3,7 @@ import {
   deepMerge,
   deepMergeWithArray,
   listify,
+  objectId,
   objectMap,
   renameObjectKeys,
   renameObjectKeysInArray,
@@ -117,4 +118,20 @@ describe('renameObjectKeys', () => {
     const keysMap = { a: 'A', b: 'B' }
     expect(renameObjectKeysInArrayDeeply(keysMap, 'b', arr)).toEqual([{ A: 1, B: [{ A: 2 }] }, { A: 3, B: [{ A: 4 }] }])
   })
+})
+
+it('objectId', () => {
+  const foo = { a: 1, b: 2 }
+  const bar = new Map()
+  // eslint-disable-next-line prefer-regex-literals
+  const baz = new RegExp('foo', 'g')
+
+  expect(objectId(foo)).toBe(objectId(foo))
+  expect(objectId(bar)).toBe(objectId(bar))
+  expect(objectId(baz)).toBe(objectId(baz))
+
+  expect(objectId(foo)).not.toBe(objectId(bar))
+  expect(objectId({})).not.toBe(objectId({}))
+  expect(objectId([])).not.toBe(objectId([]))
+  expect(objectId(/a/)).not.toBe(objectId(/a/))
 })
