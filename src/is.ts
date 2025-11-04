@@ -54,3 +54,20 @@ export const isDeno: boolean
 /** @see {@link https://bun.sh/guides/util/detect-bun} */
 // eslint-disable-next-line node/prefer-global/process
 export const isBun = typeof process !== 'undefined' && process.versions != null && process.versions.bun != null
+
+export function isMobile(): boolean {
+  if (typeof navigator === 'undefined' || typeof window === 'undefined') {
+    return false
+  }
+  // 现代浏览器优先使用 maxTouchPoints
+  if ('maxTouchPoints' in navigator) {
+    return (navigator as Navigator).maxTouchPoints > 0
+  }
+  // 降级到媒体查询
+  if (typeof window.matchMedia === 'function') {
+    return window.matchMedia('(pointer: coarse)').matches
+  }
+  // 最后降级到 UA 检测
+  const ua = navigator.userAgent || ''
+  return /android|iphone|ipad|ipod|windows phone|blackberry|mobile/i.test(ua)
+}
