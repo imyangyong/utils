@@ -1,4 +1,4 @@
-import type { AsyncTuple } from './promise'
+import type { UntilResult } from './promise'
 import { describe, expect, it } from 'vitest'
 import { createSingletonPromise, sleep, until } from './promise'
 
@@ -31,11 +31,11 @@ it('promise', async () => {
 
 describe('until', async () => {
   it('given a callback function that returns a value', async () => {
-    const result: AsyncTuple = await until(() => Promise.resolve('value'))
+    const [error, data]: UntilResult<null, string> = await until(() => Promise.resolve('value'))
 
-    expect(result.error).toBe(null)
+    expect(error).toBe(null)
 
-    expect(result.data).toEqual('value')
+    expect(data).toEqual('value')
   })
 
   it('given a callback function that throws an exception', async () => {
@@ -49,17 +49,17 @@ describe('until', async () => {
 
     expect(run).not.toThrow()
 
-    const { error, data } = await run()
+    const [error, data] = await run()
     expect(error).toEqual(customError)
     expect(data).toBe(null)
   })
 
   it('given a Promise that rejects', async () => {
-    const result: AsyncTuple = await until(() => Promise.reject(new Error('Error message')))
+    const [error, data]: UntilResult<Error, null> = await until(() => Promise.reject(new Error('Error message')))
 
-    expect(result.error).toBeInstanceOf(Error)
-    expect(result.error).toHaveProperty('message', 'Error message')
+    expect(error).toBeInstanceOf(Error)
+    expect(error).toHaveProperty('message', 'Error message')
 
-    expect(result.data).toBeNull()
+    expect(data).toBeNull()
   })
 })

@@ -123,34 +123,15 @@ export function createControlledPromise<T>(): ControlledPromise<T> {
   return promise
 }
 
-export type AsyncTuple<
-  ErrorType = Error,
-  DataType = unknown,
->
-  = | {
-    error: ErrorType
-    data: null
-  }
-  | { error: null, data: DataType }
+export type UntilResult<RejectionReason, ResolveData> =
+  | [reason: RejectionReason, data: null]
+  | [reason: null, data: ResolveData]
 
 /**
  * Gracefully handles a given Promise factory.
  *
- * @description inspired by https://github.com/open-draft/until
+ * @description inspired by https://github.com/kettanaito/until-async/blob/main/src/index.ts
  * @example
- * const { error, data } = await until(() => asyncAction())
+ * const [error, data] = await until(() => fetchUser(id))
  */
-export async function until<
-  ErrorType = Error,
-  DataType = unknown,
->(promise: () => Promise<DataType>): Promise<AsyncTuple<ErrorType, DataType>> {
-  try {
-    const data = await promise().catch((error: Error) => {
-      throw error
-    })
-    return { data, error: null }
-  }
-  catch (error: any) {
-    return { data: null, error }
-  }
-}
+export { until } from 'until-async'
