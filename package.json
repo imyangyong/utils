@@ -28,8 +28,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "unbuild",
-    "dev": "unbuild --stub",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "lint": "eslint .",
     "lint-fix": "nr lint --fix",
     "prepublishOnly": "pnpm run build",
@@ -52,9 +52,9 @@
     "eslint": "^10.9.1",
     "p-limit": "^7.3.1",
     "throttle-debounce": "5.0.2",
+    "tsdown": "^0.22.14",
     "tsx": "^4.23.12",
     "typescript": "^7.0.2",
-    "unbuild": "^3.6.1",
     "vite": "^8.2.2",
     "vitest": "^4.1.11"
   }
