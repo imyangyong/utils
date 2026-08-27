@@ -123,9 +123,9 @@ export function createControlledPromise<T>(): ControlledPromise<T> {
   return promise
 }
 
-export type UntilResult<RejectionReason, ResolveData> =
-  | [reason: RejectionReason, data: null]
-  | [reason: null, data: ResolveData]
+export type UntilResult<RejectionReason, ResolveData>
+  = | [reason: RejectionReason, data: null]
+    | [reason: null, data: ResolveData]
 
 /**
  * Gracefully handles a given Promise factory.
@@ -135,3 +135,36 @@ export type UntilResult<RejectionReason, ResolveData> =
  * const [error, data] = await until(() => fetchUser(id))
  */
 export { until } from 'until-async'
+
+/**
+ * Symbol returned by `takeLatest` when a newer invocation supersedes the current one
+ *
+ * @category Promise
+ */
+export const STALE: unique symbol = Symbol('stale')
+
+/**
+ * Only resolves with the latest invocation of the given function.
+ * If a previous invocation resolves after a newer one, it will return `STALE`.
+ *
+ * @category Promise
+ */
+export function takeLatest<Args extends unknown[], T>(
+  fn: (this: unknown, ...args: Args) => Promise<T> | T,
+): (this: unknown, ...args: Args) => Promise<T | typeof STALE> {
+  let lastId = 0
+  return function wrapped(this: unknown, ...args: Args): Promise<T | typeof STALE> {
+    const id = ++lastId
+    const isStale = () => id !== lastId
+    return Promise.resolve()
+      .then(() => fn.apply(this, args))
+      .then(
+        (value): T | typeof STALE => (isStale() ? STALE : value),
+        (err): T | typeof STALE => {
+          if (isStale())
+            return STALE
+          throw err
+        },
+      )
+  }
+}
